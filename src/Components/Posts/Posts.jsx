@@ -36,31 +36,36 @@ function Posts() {
           <span>View more</span>
         </div>
         <div className="cards">
-          {products.map((product, index) => {
-            return <div
-              key={index}
-              className="card"
-              onClick={() => {
-                setPostDetails(product);
-                navigate("/view-post");
-              }}
-            >
-              <div className="favorite">
-                <Heart></Heart>
+          {products.length ?
+            products.map((product, index) => {
+              return <div
+                key={index}
+                className="card"
+                onClick={() => {
+                  setPostDetails(product);
+                  navigate("/view-post");
+                }}
+                style={{ backgroundColor: 'white', margin: '10px 0'  }}
+              >
+                <div className="favorite">
+                  <Heart></Heart>
+                </div>
+                <div className="image">
+                  <img src={product.url} alt="" />
+                </div>
+                <div className="content">
+                  <p className="rate">&#x20B9; {product.price}</p>
+                  <span className="kilometer">{product.category}</span>
+                  <p className="name">{product.name}</p>
+                </div>
+                <div className="date">
+                  <span>{product.createdAt}</span>
+                </div>
               </div>
-              <div className="image">
-                <img src={product.url} alt="" />
-              </div>
-              <div className="content">
-                <p className="rate">&#x20B9; {product.price}</p>
-                <span className="kilometer">{product.category}</span>
-                <p className="name">{product.name}</p>
-              </div>
-              <div className="date">
-                <span>{product.createdAt}</span>
-              </div>
-            </div>
-          })}
+            })
+            :
+            <p>No products found.</p>
+          }
         </div>
       </div>
       <div className="recommendations">
