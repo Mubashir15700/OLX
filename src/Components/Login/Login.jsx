@@ -13,11 +13,13 @@ function Login() {
 
   const auth = getAuth();
 
+  const { firebase } = useContext(FirebaseContext);
+
   const handleLogin = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        // history.push("/");
+      .then((userCredential) => {
+        const user = userCredential.user;
         navigate("/");
       })
       .catch((err) => {
