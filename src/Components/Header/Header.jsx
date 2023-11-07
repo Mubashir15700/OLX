@@ -12,7 +12,6 @@ import SellButtonPlus from '../../assets/SellButtonPlus';
 function Header() {
 
   const { user } = useContext(AuthContext);
-  console.log("h", user);
 
   const navigate = useNavigate();
 
