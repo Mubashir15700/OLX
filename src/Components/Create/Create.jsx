@@ -12,14 +12,11 @@ const Create = () => {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
 
-  const { firbase } = useContext(FirebaseContext);
   const { user } = useContext(AuthContext);
-
-  const navigate = useNavigate();
-
-  // const { db, storage } = useContext(FirebaseContext);
   const storage = getStorage();
   const db = getFirestore();
+
+  const navigate = useNavigate();
 
   const date = new Date().toDateString();
 

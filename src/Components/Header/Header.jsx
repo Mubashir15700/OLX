@@ -2,12 +2,12 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { AuthContext } from '../../store/Context';
 import { getAuth, signOut } from "firebase/auth";
-import './Header.css';
 import OlxLogo from '../../assets/OlxLogo';
 import Search from '../../assets/Search';
 import Arrow from '../../assets/Arrow';
 import SellButton from '../../assets/SellButton';
 import SellButtonPlus from '../../assets/SellButtonPlus';
+import './Header.css';
 
 function Header() {
 

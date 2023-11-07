@@ -1,25 +1,23 @@
 import { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
-import { FirebaseContext } from "../../store/Context";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { FirebaseContext } from "../../store/Context";
 import Logo from "../../olx-logo.png";
 import "./Login.css";
 
 function Login() {
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const auth = getAuth();
 
-  const { firebase } = useContext(FirebaseContext);
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
+        // const user = userCredential.user;
         navigate("/");
       })
       .catch((err) => {

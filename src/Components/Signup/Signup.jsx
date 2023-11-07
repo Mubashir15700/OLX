@@ -6,8 +6,6 @@ import Logo from "../../olx-logo.png";
 import "./Signup.css";
 
 export default function Signup() {
-  const navigate = useNavigate();
-
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -15,7 +13,7 @@ export default function Signup() {
 
   const auth = getAuth();
 
-  const { firebase } = useContext(FirebaseContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

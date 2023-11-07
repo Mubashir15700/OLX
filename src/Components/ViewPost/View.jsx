@@ -7,10 +7,10 @@ function View() {
   const [userDetails, setUserDetails] = useState();
 
   const { postDetails } = useContext(PostContext);
+  
   const db = getFirestore();
 
   useEffect(() => {
-    console.log(postDetails);
     const userquery = query(collection(db, "users"), where("id", "==", postDetails.userID));
     getDocs(userquery).then((querySnapshot) => {
       querySnapshot.forEach((doc) => {

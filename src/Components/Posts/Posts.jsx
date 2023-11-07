@@ -1,16 +1,16 @@
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
+import { PostContext } from '../../store/PostContext';
 import Heart from '../../assets/Heart';
 import './Post.css';
-import { PostContext } from '../../store/PostContext';
 
 function Posts() {
   const [products, setProducts] = useState([]);
 
-  const navigate = useNavigate();
-
   const db = getFirestore();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getDocs(collection(db, "products")).then((data) => {
@@ -21,7 +21,6 @@ function Posts() {
         };
       });
       setProducts(posts);
-      console.log(posts);
     }).catch((err) => {
       console.log(err);
     });

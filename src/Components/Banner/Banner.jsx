@@ -1,5 +1,5 @@
-import './Banner.css';
 import Arrow from '../../assets/Arrow';
+import './Banner.css';
 
 function Banner() {
   return (
@@ -27,7 +27,6 @@ function Banner() {
           />
         </div>
       </div>
-      
     </div>
   );
 }

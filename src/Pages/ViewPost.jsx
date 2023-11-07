@@ -1,5 +1,5 @@
 import Header from '../Components/Header/Header'
-import View from '../Components/View/View'
+import View from '../Components/ViewPost/View'
 
 function ViewPost(props) {
     return (
