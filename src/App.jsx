@@ -3,8 +3,9 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
-import Signup from "./Components/Signup/Signup";
-import Login from "./Components/Login/Login";
+import Signup from "./Pages/Signup";
+import Login from "./Pages/Login";
+import Create from "./Pages/Create";
 import { AuthContext, FirebaseContext } from './store/Context';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/sign-up" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/create" element={<Create />} />
         </Routes>
       </Router>
     </div>
