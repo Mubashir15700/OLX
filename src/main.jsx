@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import fireBase from "./firebase/config";
+import { Firebase } from "./firebase/config";
 import { FirebaseContext } from "./store/Context";
 import Context from "./store/Context";
 import App from "./App";
@@ -7,7 +7,7 @@ import App from "./App";
 const root = createRoot(document.getElementById("root"));
 
 root.render(
-  <FirebaseContext.Provider value={{ fireBase }}>
+  <FirebaseContext.Provider value={{ Firebase }}>
     <Context>
       <App />
     </Context>

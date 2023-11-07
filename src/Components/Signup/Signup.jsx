@@ -1,51 +1,33 @@
 import { useState, useContext } from "react";
-// import { useHistory } from "react-router-dom";
-import fireBase from "../../firebase/config";
+import { useNavigate } from 'react-router-dom';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { FirebaseContext } from "../../store/Context";
 import Logo from "../../olx-logo.png";
 import "./Signup.css";
 
 export default function Signup() {
-  // const history = useHistory();
+  const navigate = useNavigate();
 
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
-  const firebase = useContext(FirebaseContext);
+  const auth = getAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fireBase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        result.user
-          .updateProfile({ displayName: userName })
-          .then(() => {
-            fireBase
-              .firestore()
-              .collection("users")
-              .add({
-                id: result.user.uid,
-                username: userName,
-                email: email,
-                phone: phone,
-              })
-              .then(() => {
-                // history.push("/login");
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed up 
+        const user = userCredential.user;
+        console.log(user);
+        navigate("/login");
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
       });
   };
 
@@ -62,7 +44,7 @@ export default function Signup() {
             id="fname"
             name="name"
             onChange={(e) => setUserName(e.target.value)}
-            defaultValue="John"
+            defaultValue="Niko Bellic"
           />
           <br />
           <label htmlFor="fname">Email</label>
@@ -73,7 +55,7 @@ export default function Signup() {
             id="email"
             name="email"
             onChange={(e) => setEmail(e.target.value)}
-            defaultValue="John"
+            defaultValue="nikob123@example.com"
           />
           <br />
           <label htmlFor="lname">Phone</label>
@@ -84,7 +66,7 @@ export default function Signup() {
             id="phone"
             name="phone"
             onChange={(e) => setPhone(e.target.value)}
-            defaultValue="Doe"
+            defaultValue="9876543210"
           />
           <br />
           <label htmlFor="lname">Password</label>
@@ -95,7 +77,7 @@ export default function Signup() {
             id="password"
             name="password"
             onChange={(e) => setPassword(e.target.value)}
-            defaultValue="Doe"
+            defaultValue="Nb@123"
           />
           <br />
           <br />

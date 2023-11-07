@@ -1,25 +1,24 @@
 import { useState, useContext } from "react";
-// import { useHistory } from "react-router-dom";
-import fireBase from "../../firebase/config";
-import FirebaseContext from "../../store/Context";
+import { useNavigate } from 'react-router-dom';
+import { FirebaseContext } from "../../store/Context";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Logo from "../../olx-logo.png";
 import "./Login.css";
 
 function Login() {
-  // const history = useHistory();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const firebase = useContext(FirebaseContext);
+  const auth = getAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    fireBase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         // history.push("/");
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);
