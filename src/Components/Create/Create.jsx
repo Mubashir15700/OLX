@@ -1,8 +1,8 @@
 import { Fragment, useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ref, getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, getFirestore  } from "firebase/firestore";
-import { FirebaseContext, AuthContext } from '../../store/Context';
+import { collection, addDoc, getFirestore } from "firebase/firestore";
+import { AuthContext } from '../../store/Context';
 import Header from '../Header/Header';
 import './Create.css';
 
@@ -11,6 +11,7 @@ const Create = () => {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
+  const [errors, setErrors] = useState();
 
   const { user } = useContext(AuthContext);
   const storage = getStorage();
@@ -20,23 +21,36 @@ const Create = () => {
 
   const date = new Date().toDateString();
 
-  const handleSubmit = () => {
-    const storageRef = ref(storage, `/images/${image.name}`);
-    uploadBytes(storageRef, image).then((reference) => {
-      getDownloadURL(reference.ref).then((url) => {
-        addDoc(collection(db, "products"), {
+  const handleSubmit = async () => {
+    const validErrors = {};
+    if (!name || !category || !price || !image) {
+      validErrors.common = "All fields are required.";
+    }
+
+    if (Object.keys(validErrors).length) {
+      setErrors(validErrors);
+    } else {
+      setErrors();
+      try {
+        const storageRef = ref(storage, `/images/${image.name}`);
+        const reference = await uploadBytes(storageRef, image);
+        const url = await getDownloadURL(reference.ref);
+
+        const productData = {
           name: name,
           category: category,
           price: price,
           url: url,
           userID: user.uid,
           createdAt: date,
-        })
-          .then(() => navigate("/"))
-          .catch((err) => alert(err.message));
-      });
-    });
-  }
+        };
+        await addDoc(collection(db, "products"), productData);
+        navigate("/");
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+  };
 
   return (
     <Fragment>
@@ -81,6 +95,7 @@ const Create = () => {
           <input type="file" onChange={(e) => setImage(e.target.files[0])} />
           <br />
           <button onClick={handleSubmit} className="uploadBtn">upload and Submit</button>
+          {errors && <p className='error'>{errors.common}</p>}
         </div>
       </card>
     </Fragment>

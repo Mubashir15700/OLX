@@ -1,7 +1,6 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { FirebaseContext } from "../../store/Context";
 import Logo from "../../olx-logo.png";
 import "./Signup.css";
 
@@ -10,6 +9,7 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState();
 
   const auth = getAuth();
 
@@ -17,21 +17,32 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
 
-      await updateProfile(auth.currentUser, {
-        displayName: userName
-      });
-
-      navigate("/login");
-    } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error(errorCode, errorMessage);
+    const validErrors = {};
+    if (!userName || !email || !phone || !password) {
+      validErrors.common = "All fields are required.";
     }
-  };
+
+    if (Object.keys(validErrors).length) {
+      setErrors(validErrors);
+    } else {
+      setErrors();
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+
+        await updateProfile(auth.currentUser, {
+          displayName: userName
+        });
+
+        navigate("/login");
+      } catch (error) {
+        alert(error);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error(errorCode, errorMessage);
+      }
+    };
+  }
 
   return (
     <div>
@@ -84,6 +95,7 @@ export default function Signup() {
           <br />
           <br />
           <button type="submit">Signup</button>
+          {errors && <p className="error">{errors.common}</p>}
         </form>
         <a>Login</a>
       </div>

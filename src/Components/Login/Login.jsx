@@ -1,28 +1,36 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { FirebaseContext } from "../../store/Context";
 import Logo from "../../olx-logo.png";
 import "./Login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState();
 
   const auth = getAuth();
 
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // const user = userCredential.user;
+    const valErrors = {};
+    if (!email.length || !password.length) {
+      valErrors.common = "All fields are required.";
+    }
+
+    if (Object.keys(valErrors).length) {
+      setErrors(valErrors);
+    } else {
+      setErrors();
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
         navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      } catch (error) {
+        alert(error.message);
+      }
+    }
   };
 
   return (
@@ -56,6 +64,7 @@ function Login() {
           <button type="submit">Login</button>
         </form>
         <a>Signup</a>
+        {errors && <p className="error">{errors.common}</p>}
       </div>
     </div>
   );
